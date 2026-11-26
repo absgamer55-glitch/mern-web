@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-ink font-sans antialiased;
+  background:
+    radial-gradient(900px 520px at 100% 0%, #FFF4E8 0%, transparent 70%),
+    radial-gradient(700px 520px at 0% 55%, #F2DAC6 0%, transparent 70%),
+    #F7E9DD;
+}
+::selection { background: #14100F; color: #F7E9DD; }
+
+h1 em, h2 em, h3 em { font-style: italic; font-weight: 400; @apply text-resin; }
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-resin disabled:opacity-50; }
+  .btn-dark { @apply btn bg-ink text-white shadow-[0_12px_28px_-10px_rgba(150,100,40,.6)] hover:bg-resin; }
+  .btn-line { @apply btn border border-ink/30 hover:border-ink; }
+  .field { @apply w-full rounded-xl border border-ink/15 bg-white/60 px-4 py-3 text-sm outline-none focus:border-resin focus:ring-1 focus:ring-resin; }
+  .label { @apply mb-1 block text-sm font-medium; }
+}
+
+@keyframes fill { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.liquid-rise { animation: fill 2.2s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: fadeIn .8s cubic-bezier(.2,.7,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .liquid-rise, .fade-in { animation: none; } }
