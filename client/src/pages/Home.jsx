@@ -19,7 +19,7 @@ const slides = [
   {
     tone: 'plum', dark: true, color: '#C98F86',
     bg: 'bg-gradient-to-br from-[#240A28] via-[#5A1D60] to-[#C58BCB]',
-    eyebrow: 'Ombre experience',
+    eyebrow: 'FTD experience',
     title: <>Not sure which scent is <em>yours?</em></>,
     text: "Tell us what you usually wear and we'll point you to a bottle.",
     primary: { to: '/support', label: 'Ask customer care', icon: 'chat' },
@@ -45,7 +45,7 @@ const Chevron = ({ dir }) => <svg width="16" height="16" viewBox="0 0 24 24" fil
 function Scene({ tone, color }) {
   const smoke = tone === 'cream' ? '#2A2220' : tone === 'plum' ? '#F0C4F4' : '#E0B35A';
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[32rem]">
+    <div className="relative mx-auto aspect-square w-full max-w-[19rem] sm:max-w-[26rem] md:max-w-[32rem]">
       <svg viewBox="0 0 600 600" className="absolute inset-0 h-full w-full" aria-hidden="true">
         <defs>
           <filter id={`blur-${tone}`}><feGaussianBlur stdDeviation="9" /></filter>
@@ -97,10 +97,10 @@ function Hero() {
       {s.image && (
         <img src={s.image} alt="" className="hidden object-cover md:absolute md:inset-y-0 md:right-0 md:block md:h-full md:w-[55%] [mask-image:linear-gradient(to_right,transparent,black_30%)]" />
       )}
-      <div className="relative mx-auto grid max-w-6xl items-center gap-6 px-5 pb-10 pt-12 md:min-h-[40rem] md:grid-cols-2 md:py-16">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-6 px-5 pb-10 pt-10 md:min-h-[40rem] md:grid-cols-2 md:py-16">
         <div key={`t${i}`} className={`fade-in ${s.dark ? 'text-white' : 'text-ink'}`}>
           <Eyebrow className="max-w-sm">{s.eyebrow}</Eyebrow>
-          <h1 className={`mt-6 font-display text-5xl leading-[1.05] md:text-7xl ${s.emColor || ''}`}>{s.title}</h1>
+          <h1 className={`mt-6 font-display text-4xl leading-[1.05] sm:text-5xl md:text-7xl ${s.emColor || ''}`}>{s.title}</h1>
           <p className={`mt-6 max-w-md text-lg ${s.dark ? 'text-white/85' : 'text-ink/70'}`}>{s.text}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link to={s.primary.to} className={primary}>
@@ -108,9 +108,9 @@ function Hero() {
             </Link>
             {s.secondary && <Link to={s.secondary.to} className={secondary}>{s.secondary.label}<Chevron dir="r" /></Link>}
           </div>
-          <div className="mt-12 flex items-center gap-5">
+          <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-5">
             <span className="font-display text-xl">{pad(i + 1)} <span className="opacity-50">— {pad(slides.length)}</span></span>
-            <span className={`relative block h-0.5 w-28 ${s.dark ? 'bg-white/25' : 'bg-ink/20'}`}>
+            <span className={`relative block h-0.5 w-14 sm:w-28 ${s.dark ? 'bg-white/25' : 'bg-ink/20'}`}>
               <span className={`absolute inset-y-0 left-0 transition-all duration-500 ${s.dark ? 'bg-white' : 'bg-ink'}`} style={{ width: `${((i + 1) / slides.length) * 100}%` }} />
             </span>
             {[['l', -1, 'Previous slide'], ['r', 1, 'Next slide']].map(([d, n, label]) => (
@@ -148,24 +148,24 @@ export default function Home() {
     <>
       <Hero />
 
-      <section className="mx-auto max-w-6xl px-5 pt-20">
+      <section className="mx-auto max-w-6xl px-5 pt-14 sm:pt-20">
         <Eyebrow className="text-ink">Our favorites</Eyebrow>
         <div className="mt-4 flex items-end justify-between">
-          <h2 className="font-display text-5xl md:text-6xl">Most <em>loved</em></h2>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl">Most <em>loved</em></h2>
           <Link to="/shop" className="inline-flex items-center gap-2 border-b border-ink pb-1 text-sm">See all <Arrow /></Link>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6 lg:grid-cols-3">
           {featured.map((p) => <ProductCard key={p._id} p={p} />)}
         </div>
         {!featured.length && <p className="mt-8 text-ink/60">No fragrances yet. Add some from the admin panel.</p>}
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 pt-24">
+      <section className="mx-auto max-w-6xl px-5 pt-16 sm:pt-24">
         <Eyebrow className="text-ink">By family</Eyebrow>
         <h2 className="mt-4 font-display text-4xl md:text-5xl">Find your <em>family</em></h2>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
           {families.map((f) => (
-            <Link key={f.name} to={`/shop?family=${f.name}`} className="group rounded-3xl bg-white/45 p-6 transition hover:bg-ink hover:text-mist">
+            <Link key={f.name} to={`/shop?family=${f.name}`} className="group rounded-3xl bg-white/45 p-4 transition hover:bg-ink sm:p-6 hover:text-mist">
               <span className="mb-5 block h-3 w-3 rounded-full" style={{ background: f.dot }} />
               <div className="font-display text-2xl">{f.name}</div>
               <div className="mt-2 text-sm opacity-70">{f.note}</div>

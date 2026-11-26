@@ -20,7 +20,7 @@ export default function Register() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-md flex-col justify-center px-5 py-10">
-      <Eyebrow className="mb-4">Join Ombre</Eyebrow>
+      <Eyebrow className="mb-4">Join FTD</Eyebrow>
       <h1 className="font-display text-5xl">Create <em>account</em></h1>
       <form onSubmit={submit} className="mt-8 space-y-4">
         <div><label className="label" htmlFor="name">Full name</label><input id="name" className="field" value={form.name} onChange={set('name')} required /></div>

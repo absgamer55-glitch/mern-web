@@ -63,8 +63,8 @@ export default function Admin() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
       <Eyebrow className="mb-4">Dashboard</Eyebrow>
-      <h1 className="font-display text-5xl md:text-6xl">Admin <em>panel</em></h1>
-      <div className="mt-6 flex gap-2">{tabBtn('products', `Products (${products.length})`)}{tabBtn('orders', `Orders (${orders.length})`)}{tabBtn('tickets', `Tickets (${tickets.filter((t) => t.status !== 'closed').length} open)`)}</div>
+      <h1 className="font-display text-4xl sm:text-5xl md:text-6xl">Admin <em>panel</em></h1>
+      <div className="mt-6 flex flex-wrap gap-2">{tabBtn('products', `Products (${products.length})`)}{tabBtn('orders', `Orders (${orders.length})`)}{tabBtn('tickets', `Tickets (${tickets.filter((t) => t.status !== 'closed').length} open)`)}</div>
       {msg && <p className="mt-4 rounded-xl bg-glass px-4 py-3 text-sm" role="status">{msg}</p>}
 
       {tab === 'products' && (

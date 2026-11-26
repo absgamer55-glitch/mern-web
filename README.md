@@ -1,4 +1,4 @@
-# Ombre — Perfume store (MERN + Tailwind, plain JavaScript)
+# FTD — Perfume store (MERN + Tailwind, plain JavaScript)
 
 Pages: Home, Shop, Product, Cart/Checkout, plus Sign in, Sign up and an Admin panel.
 
@@ -9,8 +9,8 @@ You need Node 18+ and MongoDB running locally (or an Atlas URI).
 ```
 cd server
 npm install
-cp .env.example .env     # set MONGO_URI and JWT_SECRET 
-            # adds 5 sample perfumes + an admin user
+cp .env.example .env     # set MONGO_URI and JWT_SECRET
+npm run seed             # adds 5 sample perfumes + an admin user
 npm run dev              # http://localhost:5000
 ```
 Admin login comes from ADMIN_EMAIL / ADMIN_PASSWORD in `.env`
@@ -29,4 +29,4 @@ npm run dev              # http://localhost:5173
 - See every order and change its status (pending → confirmed → shipped → delivered / cancelled)
 
 ## Rename the brand
-Search for "Ombre" in `client/index.html`, `Navbar.jsx`, `Footer.jsx`.
+Search for "FTD" in `client/index.html`, `Bottle.jsx`, `Navbar.jsx`, `Footer.jsx`, `Home.jsx`, `Register.jsx`, `TicketThread.jsx`.

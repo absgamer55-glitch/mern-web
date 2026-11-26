@@ -40,7 +40,7 @@ export default function TicketThread({ t, isAdmin, onReply, onStatus }) {
           const mine = isAdmin ? m.from === 'admin' : m.from === 'customer';
           return (
             <li key={i} className={`max-w-[85%] px-4 py-3 ${mine ? 'ml-auto bg-ink text-mist' : 'bg-glass/70'}`}>
-              <p className="mb-1 text-xs opacity-60">{m.from === 'admin' ? 'Ombre support' : 'Customer'} · {new Date(m.at).toLocaleString()}</p>
+              <p className="mb-1 text-xs opacity-60">{m.from === 'admin' ? 'FTD support' : 'Customer'} · {new Date(m.at).toLocaleString()}</p>
               <p className="whitespace-pre-wrap">{m.text}</p>
             </li>
           );

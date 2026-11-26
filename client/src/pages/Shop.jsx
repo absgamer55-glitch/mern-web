@@ -30,18 +30,20 @@ export default function Shop() {
     setParams(next, { replace: true });
   };
   const shown = saved ? result.items.filter((p) => ids.includes(p._id)) : result.items;
-  const chip = (on) => `rounded-full border px-5 py-2 text-sm transition ${on ? 'border-ink bg-ink text-white' : 'border-ink/25 hover:border-ink'}`;
+  const chip = (on) => `shrink-0 whitespace-nowrap rounded-full border px-5 py-2 text-sm transition ${on ? 'border-ink bg-ink text-white' : 'border-ink/25 hover:border-ink'}`;
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-14">
       <Eyebrow className="mb-4">The collection</Eyebrow>
-      <h1 className="font-display text-5xl md:text-6xl">All <em>fragrances</em></h1>
-      <div className="mt-8 flex flex-wrap items-center gap-2">
+      <h1 className="font-display text-4xl sm:text-5xl md:text-6xl">All <em>fragrances</em></h1>
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         {['', ...FAMILIES].map((f) => (
           <button key={f || 'all'} onClick={() => update({ family: f })} className={chip(family === f)}>{f || 'All'}</button>
         ))}
         <button onClick={() => setSaved((s) => !s)} aria-pressed={saved} className={chip(saved)}>Saved ♥</button>
-        <input value={q} onChange={(e) => update({ q: e.target.value })} placeholder="Search by name" className="field ml-auto !w-56" aria-label="Search fragrances" />
+        </div>
+        <input value={q} onChange={(e) => update({ q: e.target.value })} placeholder="Search by name" className="field sm:!w-56" aria-label="Search fragrances" />
       </div>
 
       {state === 'ok' && q.trim() && result.closest && shown.length > 0 && <p className="mt-8 rounded-xl bg-glass/60 px-4 py-3 text-sm">No exact match for “{q.trim()}”. These look closest:</p>}
@@ -49,7 +51,7 @@ export default function Shop() {
       {state === 'loading' && <p className="mt-12 text-ink/60">Loading…</p>}
       {state === 'error' && <p className="mt-12">Couldn't load fragrances. Check that the server is running.</p>}
       {state === 'ok' && !shown.length && <p className="mt-12 text-ink/60">{saved ? 'Nothing saved yet. Tap the heart on a fragrance.' : 'Nothing matches. Try another family or clear the search.'}</p>}
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
         {shown.map((p) => <ProductCard key={p._id} p={p} />)}
       </div>
     </div>

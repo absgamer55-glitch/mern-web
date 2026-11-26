@@ -28,9 +28,9 @@ export default function Footer() {
   return (
     <footer className="mt-24">
       <section className="bg-gradient-to-b from-[#FBEADF] to-[#F2D9C6]">
-        <div className="mx-auto grid max-w-6xl gap-y-8 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-ink/15">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-3 py-10 sm:px-5 sm:py-12 lg:grid-cols-4 lg:divide-x lg:divide-ink/15">
           {perks.map((p) => (
-            <div key={p.title} className="flex flex-col items-center px-6 text-center">
+            <div key={p.title} className="flex flex-col items-center px-3 text-center sm:px-6">
               <Icon>{p.icon}</Icon>
               <h3 className="mt-3 font-display text-xl">{p.title}</h3>
               <p className="mt-1 max-w-[16rem] text-sm text-ink/70">{p.text}</p>
@@ -40,7 +40,7 @@ export default function Footer() {
       </section>
 
       <div className="relative overflow-hidden bg-gradient-to-br from-[#241127] via-[#1B0F1C] to-[#120A12] text-mist">
-        <svg className="pointer-events-none absolute -bottom-10 -right-10 h-80 w-80 opacity-60" viewBox="-100 -100 200 200" aria-hidden="true">
+        <svg className="pointer-events-none absolute -bottom-10 -right-10 h-44 w-44 opacity-40 sm:h-80 sm:w-80 sm:opacity-60" viewBox="-100 -100 200 200" aria-hidden="true">
           <defs>
             <linearGradient id="petal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#B35FB0" /><stop offset="1" stopColor="#4A1650" /></linearGradient>
           </defs>
@@ -49,9 +49,9 @@ export default function Footer() {
           ))}
         </svg>
 
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
-            <div className="font-display text-5xl">Ombre</div>
+        <div className="relative mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-5 py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="col-span-2 lg:col-span-1">
+            <div className="font-display text-5xl tracking-wider">FTD</div>
             <p className="mt-4 max-w-xs text-mist/80">Small-batch perfumes made from a short list of honest ingredients.</p>
           </div>
           <div>
@@ -88,7 +88,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <span className="text-xs text-mist/50">© {new Date().getFullYear()} Ombre. All rights reserved.</span>
+            <span className="text-xs text-mist/50">© {new Date().getFullYear()} FTD. All rights reserved.</span>
           </div>
         </div>
       </div>

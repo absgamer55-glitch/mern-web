@@ -46,7 +46,7 @@ export default function Support() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
       <Eyebrow className="mb-4">We are here</Eyebrow>
-      <h1 className="font-display text-5xl md:text-6xl">Customer <em>care</em></h1>
+      <h1 className="font-display text-4xl sm:text-5xl md:text-6xl">Customer <em>care</em></h1>
       <p className="mt-3 max-w-xl text-ink/70">Tell us what went wrong and pick the order it is about. We reply inside the ticket.</p>
 
       <div className="mt-10 grid gap-12 lg:grid-cols-[22rem_1fr]">

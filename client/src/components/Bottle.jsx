@@ -28,7 +28,7 @@ export default function Bottle({ color = '#D9A03B', rise = false, label = true, 
       <rect x="25" y="90" width="5" height="88" rx="2.5" fill="#fff" fillOpacity=".55" />
       {label && (
         <>
-          <text x="60" y="132" textAnchor="middle" fontFamily="'Bodoni Moda', serif" fontSize="19" fill={text}>Ombre</text>
+          <text x="60" y="132" textAnchor="middle" fontFamily="'Bodoni Moda', serif" fontSize="20" letterSpacing="2" fill={text}>FTD</text>
           <text x="60" y="146" textAnchor="middle" fontFamily="'DM Sans', sans-serif" fontSize="5" letterSpacing="1.6" fill={text}>EAU DE PARFUM</text>
         </>
       )}

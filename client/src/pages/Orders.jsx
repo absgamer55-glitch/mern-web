@@ -15,9 +15,9 @@ function Progress({ status }) {
         <li key={s} className="flex flex-1 items-center last:flex-none">
           <div className="flex flex-col items-center gap-1">
             <span className={`h-3 w-3 rounded-full ${i <= at ? 'bg-resin' : 'bg-ink/20'}`} />
-            <span className={`text-xs capitalize ${i === at ? 'font-medium' : 'text-ink/60'}`}>{s}</span>
+            <span className={`text-[11px] capitalize sm:text-xs ${i === at ? 'font-medium' : 'text-ink/60'}`}>{s}</span>
           </div>
-          {i < STEPS.length - 1 && <span className={`mx-2 mb-5 h-px flex-1 ${i < at ? 'bg-resin' : 'bg-ink/20'}`} />}
+          {i < STEPS.length - 1 && <span className={`mx-1 mb-5 h-px sm:mx-2 flex-1 ${i < at ? 'bg-resin' : 'bg-ink/20'}`} />}
         </li>
       ))}
     </ol>
@@ -35,7 +35,7 @@ export default function Orders() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
       <Eyebrow className="mb-4">Tracking</Eyebrow>
-      <h1 className="font-display text-5xl md:text-6xl">Your <em>orders</em></h1>
+      <h1 className="font-display text-4xl sm:text-5xl md:text-6xl">Your <em>orders</em></h1>
       {state === 'loading' && <p className="mt-8 text-ink/60">Loading…</p>}
       {state === 'error' && <p className="mt-8">Couldn't load your orders. Try again in a moment.</p>}
       {state === 'ok' && !orders.length && (
