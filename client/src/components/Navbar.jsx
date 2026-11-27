@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useProducts } from '../useProducts.js';
 import { searchProducts } from '../search.js';
-import { money } from '../api.js';
+import { money, firstImage } from '../api.js';
 import Bottle from './Bottle.jsx';
 
 const Truck = () => (
@@ -175,7 +175,7 @@ export default function Navbar() {
                       className={`flex items-center gap-4 px-4 py-3 ${idx === active ? 'bg-glass/60' : ''}`}
                     >
                       <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl p-1.5" style={{ background: `linear-gradient(160deg, ${p.color}55, ${p.color}18)` }}>
-                        {p.image ? <img src={p.image} alt="" className="h-full w-full object-cover" /> : <Bottle color={p.color} label={false} className="h-full" />}
+                        {firstImage(p) ? <img src={firstImage(p)} alt="" className="h-full w-full object-cover" /> : <Bottle color={p.color} label={false} className="h-full" />}
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate font-display text-lg leading-tight">{p.name}</span>

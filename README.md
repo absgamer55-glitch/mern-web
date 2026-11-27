@@ -30,3 +30,31 @@ npm run dev              # http://localhost:5173
 
 ## Rename the brand
 Search for "FTD" in `client/index.html`, `Bottle.jsx`, `Navbar.jsx`, `Footer.jsx`, `Home.jsx`, `Register.jsx`, `TicketThread.jsx`.
+
+## Product photos, notes and payments
+
+**Photos.** In Admin > Products you can add up to 4 photos per fragrance (upload from your
+computer, or paste a link). Uploaded photos are shrunk in the browser and saved with the product.
+For this to work, in `server/index.js` change
+
+    app.use(express.json());
+
+to
+
+    app.use(express.json({ limit: '10mb' }));
+
+and restart the server.
+
+**Payments.** Cash on delivery works out of the box. For Easypaisa and JazzCash, add your
+account number (and account title) to `server/.env`, then restart:
+
+    EASYPAISA_NUMBER=03XXXXXXXXX
+    EASYPAISA_TITLE=Your name or business
+    JAZZCASH_NUMBER=03XXXXXXXXX
+    JAZZCASH_TITLE=Your name or business
+
+The customer sends the money from their app and enters the transaction ID. The order then shows
+"Awaiting verification" in Admin > Orders; after you check the payment, set it to "Paid".
+Card and PayPro are listed as "Coming soon" until a gateway merchant account is connected.
+
+Prices are shown in Rs.

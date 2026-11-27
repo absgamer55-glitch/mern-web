@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
     stock: { type: Number, default: 0, min: 0 },
     color: { type: String, default: '#B8791F' },
     image: { type: String, default: '' },
+    images: { type: [String], default: [], validate: [(arr) => arr.length <= 4, 'Up to 4 photos per fragrance'] },
     featured: { type: Boolean, default: false },
   },
   { timestamps: true }

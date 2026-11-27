@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Bottle from './Bottle.jsx';
-import { money } from '../api.js';
+import { money, firstImage } from '../api.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useFavs } from '../context/FavContext.jsx';
 
@@ -19,10 +19,10 @@ export default function ProductCard({ p }) {
       <div className="relative">
         <Link to={`/product/${p._id}`} className="block" aria-label={p.name}>
           <div
-            className="flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-glass/60 p-4 sm:p-8"
+            className={`flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-glass/60 ${firstImage(p) ? '' : 'p-4 sm:p-8'}`}
             style={{ background: `linear-gradient(160deg, ${p.color}55, ${p.color}18)` }}
           >
-            {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : <Bottle color={p.color} className="h-full" />}
+            {firstImage(p) ? <img src={firstImage(p)} alt={p.name} className="h-full w-full object-cover" /> : <Bottle color={p.color} className="h-full" />}
           </div>
         </Link>
         <button

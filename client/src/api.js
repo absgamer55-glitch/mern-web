@@ -15,4 +15,8 @@ export async function api(path, { method = 'GET', body } = {}) {
   return data;
 }
 
-export const money = (n) => `$${Number(n).toFixed(2)}`;
+export const money = (n) => `Rs. ${Number(n || 0).toLocaleString('en-PK', { maximumFractionDigits: 2 })}`;
+
+// A product can have up to 4 photos. Older products may only have one `image` link.
+export const allImages = (p) => (p?.images?.length ? p.images : p?.image ? [p.image] : []);
+export const firstImage = (p) => allImages(p)[0] || '';

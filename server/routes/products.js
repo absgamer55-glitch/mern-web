@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
     const filter = {};
     if (family) filter.family = family;
     if (q) filter.name = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-    res.json(await Product.find(filter).sort({ createdAt: -1 }));
+    res.json(await Product.find(filter).select({ images: { $slice: 1 } }).sort({ createdAt: -1 }));
   } catch (e) { next(e); }
 });
 

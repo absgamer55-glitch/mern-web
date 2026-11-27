@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api, money } from '../api.js';
+import { payText } from '../payments.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import Bottle from '../components/Bottle.jsx';
@@ -11,23 +12,48 @@ export default function Cart() {
   const { user } = useAuth();
   const nav = useNavigate();
   const [form, setForm] = useState({ name: user?.name || '', phone: '', address: '', city: '' });
+  const [methods, setMethods] = useState([]);
+  const [method, setMethod] = useState('cod');
+  const [tid, setTid] = useState('');
+  const [payer, setPayer] = useState('');
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [placed, setPlaced] = useState(false);
+  const [placed, setPlaced] = useState('');
   const [orders, setOrders] = useState([]);
 
   const loadOrders = () => user && api('/orders/mine').then(setOrders).catch(() => {});
   useEffect(() => { loadOrders(); }, [user]);
+  useEffect(() => {
+    api('/orders/payment-methods').then((m) => {
+      setMethods(m);
+      const first = m.find((x) => x.enabled);
+      if (first) setMethod(first.id);
+    }).catch(() => {});
+  }, []);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const sel = methods.find((m) => m.id === method);
+  const wallet = sel?.kind === 'wallet' && sel.enabled;
+
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(sel.account.number); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* ignore */ }
+  };
 
   const place = async (e) => {
     e.preventDefault();
     if (!user) return nav('/login', { state: { from: '/cart' } });
     setError(''); setBusy(true);
     try {
-      await api('/orders', { method: 'POST', body: { items: items.map((i) => ({ product: i._id, qty: i.qty })), shipping: form } });
-      clear(); setPlaced(true); loadOrders();
+      await api('/orders', {
+        method: 'POST',
+        body: {
+          items: items.map((i) => ({ product: i._id, qty: i.qty })), shipping: form,
+          paymentMethod: method, ...(wallet ? { transactionId: tid, payerNumber: payer } : {}),
+        },
+      });
+      setPlaced(wallet ? 'Order placed. We will check your payment and confirm it shortly.' : 'Order placed. You pay in cash when it arrives.');
+      clear(); setTid(''); setPayer(''); loadOrders();
     } catch (err) { setError(err.message); }
     setBusy(false);
   };
@@ -36,13 +62,13 @@ export default function Cart() {
     <div className="mx-auto max-w-6xl px-5 py-12">
       <Eyebrow className="mb-4">Your bag</Eyebrow>
       <h1 className="font-display text-4xl sm:text-5xl md:text-6xl">Your <em>cart</em></h1>
-      {placed && <p className="mt-6 rounded-xl bg-ink px-5 py-4 text-mist">Order placed. We'll update its status below as it moves.</p>}
+      {placed && <p className="mt-6 rounded-xl bg-ink px-5 py-4 text-mist" role="status">{placed} You can follow it under <Link to="/orders" className="underline">Orders</Link>.</p>}
 
       {!items.length ? (
         <p className="mt-8 text-ink/70">Your cart is empty. <Link to="/shop" className="underline">Browse fragrances</Link></p>
       ) : (
-        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_22rem]">
-          <ul className="divide-y divide-ink/10 border-y border-ink/10">
+        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_24rem]">
+          <ul className="divide-y divide-ink/10 self-start border-y border-ink/10">
             {items.map((i) => (
               <li key={i._id} className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3 py-5 sm:grid-cols-[auto_1fr_auto_auto] sm:gap-x-5">
                 <div className="bg-glass/60 p-3"><Bottle color={i.color} className="h-20" /></div>
@@ -52,22 +78,53 @@ export default function Cart() {
                   <button onClick={() => remove(i._id)} className="mt-1 text-sm underline underline-offset-4">Remove</button>
                 </div>
                 <div className="col-span-2 flex items-center justify-between sm:contents">
-                <input type="number" min="1" max={i.stock} value={i.qty} onChange={(e) => setQty(i._id, parseInt(e.target.value, 10) || 1)} className="field !w-20" aria-label={`Quantity for ${i.name}`} />
-                <span className="w-20 text-right">{money(i.price * i.qty)}</span>
+                  <input type="number" min="1" max={i.stock} value={i.qty} onChange={(e) => setQty(i._id, parseInt(e.target.value, 10) || 1)} className="field !w-20" aria-label={`Quantity for ${i.name}`} />
+                  <span className="text-right sm:w-24">{money(i.price * i.qty)}</span>
                 </div>
               </li>
             ))}
           </ul>
 
-          <form onSubmit={place} className="space-y-4">
-            <h2 className="font-display text-2xl">Delivery</h2>
-            {[['name', 'Full name'], ['phone', 'Phone'], ['address', 'Address'], ['city', 'City']].map(([k, l]) => (
-              <div key={k}><label className="label" htmlFor={k}>{l}</label><input id={k} className="field" value={form[k]} onChange={set(k)} required /></div>
-            ))}
+          <form onSubmit={place} className="space-y-6">
+            <div className="space-y-4">
+              <h2 className="font-display text-2xl">Delivery</h2>
+              {[['name', 'Full name'], ['phone', 'Phone'], ['address', 'Address'], ['city', 'City']].map(([k, l]) => (
+                <div key={k}><label className="label" htmlFor={k}>{l}</label><input id={k} className="field" value={form[k]} onChange={set(k)} required /></div>
+              ))}
+            </div>
+
+            <fieldset className="space-y-3">
+              <legend className="font-display text-2xl">Payment</legend>
+              {methods.map((m) => (
+                <label key={m.id} className={`flex items-start gap-3 rounded-2xl border p-4 transition ${m.enabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-55'} ${method === m.id ? 'border-ink bg-white/70' : 'border-ink/15 bg-white/30'}`}>
+                  <input type="radio" name="payment" value={m.id} checked={method === m.id} disabled={!m.enabled} onChange={() => setMethod(m.id)} className="mt-1 accent-ink" />
+                  <span>
+                    <span className="block font-medium">{m.label}{!m.enabled && <span className="ml-2 rounded-full bg-glass px-2 py-0.5 text-xs font-normal">Coming soon</span>}</span>
+                    <span className="block text-sm text-ink/60">{m.note}</span>
+                  </span>
+                </label>
+              ))}
+
+              {wallet && (
+                <div className="space-y-3 rounded-2xl bg-glass/60 p-4 text-sm">
+                  <p>1. Open {sel.label} and send <b>{money(total)}</b> to:</p>
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-white/70 px-4 py-3">
+                    <span>
+                      <span className="block text-base font-medium">{sel.account.number}</span>
+                      {sel.account.title && <span className="block text-xs text-ink/60">{sel.account.title}</span>}
+                    </span>
+                    <button type="button" onClick={copy} className="text-xs underline underline-offset-4">{copied ? 'Copied' : 'Copy'}</button>
+                  </div>
+                  <p>2. Enter the transaction ID from the confirmation message.</p>
+                  <div><label className="label" htmlFor="tid">Transaction ID</label><input id="tid" className="field" value={tid} onChange={(e) => setTid(e.target.value)} required minLength={6} /></div>
+                  <div><label className="label" htmlFor="payer">Your {sel.label} number (optional)</label><input id="payer" className="field" value={payer} onChange={(e) => setPayer(e.target.value)} inputMode="tel" /></div>
+                </div>
+              )}
+            </fieldset>
+
             <div className="flex justify-between border-t border-ink/10 pt-4 text-lg"><span>Total</span><span>{money(total)}</span></div>
-            {error && <p className="text-sm text-red-700">{error}</p>}
-            <button disabled={busy} className="btn-dark w-full">{user ? (busy ? 'Placing order…' : 'Place order') : 'Sign in to order'}</button>
-            <p className="text-xs text-ink/60">Payment is collected on delivery.</p>
+            {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
+            <button disabled={busy || !sel?.enabled} className="btn-dark w-full">{user ? (busy ? 'Placing order…' : 'Place order') : 'Sign in to order'}</button>
           </form>
         </div>
       )}
@@ -78,7 +135,10 @@ export default function Cart() {
           <ul className="mt-4 divide-y divide-ink/10 border-y border-ink/10 text-sm">
             {orders.map((o) => (
               <li key={o._id} className="flex flex-wrap items-center justify-between gap-3 py-4">
-                <span>{new Date(o.createdAt).toLocaleDateString()} · {o.items.map((i) => `${i.name} × ${i.qty}`).join(', ')}</span>
+                <span>
+                  {new Date(o.createdAt).toLocaleDateString()} · {o.items.map((i) => `${i.name} × ${i.qty}`).join(', ')}
+                  <span className="block text-ink/60">{payText(o)}</span>
+                </span>
                 <span className="flex items-center gap-4"><b>{money(o.total)}</b><span className="rounded-full bg-glass px-3 py-1 capitalize">{o.status}</span></span>
               </li>
             ))}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, money } from '../api.js';
 import { shortId } from '../components/TicketThread.jsx';
+import { payText } from '../payments.js';
 import Eyebrow from '../components/Eyebrow.jsx';
 
 const STEPS = ['pending', 'confirmed', 'shipped', 'delivered'];
@@ -58,6 +59,7 @@ export default function Orders() {
                 <li key={k} className="flex justify-between py-2"><span>{i.name} × {i.qty}</span><span>{money(i.price * i.qty)}</span></li>
               ))}
             </ul>
+            <p className="mt-3">Payment: <b>{payText(o)}</b></p>
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-ink/60">
               <span>Deliver to {o.shipping?.name}, {o.shipping?.address}, {o.shipping?.city}</span>
               <Link to={`/support?order=${o._id}`} className="text-ink underline underline-offset-4">Get help with this order</Link>
